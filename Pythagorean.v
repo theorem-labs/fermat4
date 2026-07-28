@@ -201,7 +201,7 @@ Proof.
     elim (rat_coo2 x y (conj H0 H2)); intros; elim H4; intros.
   elim (interCDr_sol x0 x y).
   unfold eqp; simpl; intro; elim H7; intros; elim H3; simpl; intros;
-    rewrite H8 in H10; elimtype False; generalize (Rge_le (-1) 0 H10)%R;
+    rewrite H8 in H10; exfalso; generalize (Rge_le (-1) 0 H10)%R;
     fold (~ (0 <= -1)%R); apply Rlt_not_le; prove_sup.
   cut (0 < / (1 + x0 * x0))%R;
     [ intro
@@ -355,9 +355,9 @@ Proof.
         unfold in_ucp_set, cond_pq, cond_pqb in H0;
         unfold pytha_set, cond_pq, cond_pqb; simpl in H0; elim_hyps;
         generalize (relp_pq1 _ _ H1 H4 H5 H2); intro;
-        generalize (Zgt_lt _ _ a0); intro; generalize (Zlt_not_eq _ _ H8);
+        generalize (Z.gt_lt _ _ a0); intro; generalize (Zlt_not_eq _ _ H8);
         clear H8; intro; generalize (sym_not_eq H8); clear H8; intro;
-        generalize (Zgt_lt _ _ H3); intro; generalize (Zlt_not_eq _ _ H9);
+        generalize (Z.gt_lt _ _ H3); intro; generalize (Zlt_not_eq _ _ H9);
         clear H9; intro; generalize (sym_not_eq H9); clear H9; intro;
         (cut (x * x + x0 * x0 <> 0); [ intro | auto with zarith ];
         (cut ((IZR x0 * IZR x0 - IZR x * IZR x) /
@@ -391,7 +391,7 @@ Proof.
         auto with zarith
       | rewrite <- H12; assumption ]).
   unfold is_ucp, is_ratp, is_posp; simpl; intuition; unfold is_rat;
-    unfold is_pytha, pos_triple in H; elim_hyps; generalize (Zgt_lt _ _ a0);
+    unfold is_pytha, pos_triple in H; elim_hyps; generalize (Z.gt_lt _ _ a0);
     intro; generalize (IZR_lt _ _ H4); intro; simpl in H5;
     fold (IZR c > 0)%R in H5;
     [ exists (a, c); intuition | exists (b, c); intuition
@@ -408,8 +408,8 @@ Qed.
 Lemma pytha_thm2 : forall a b c : Z, (pytha_set a b c) -> (is_pytha a b c).
 Proof.
   unfold pytha_set, is_pytha, cond_pq, cond_pqb, pos_triple; intros; elim_hyps;
-    rewrite H; rewrite H7; rewrite H0; split; ring || (intuition; apply Zle_ge;
-    generalize (Zge_le _ _ H2); clear H2; intro; generalize (Zgt_lt _ _ H4);
+    rewrite H; rewrite H7; rewrite H0; split; ring || (intuition; apply Z.le_ge;
+    generalize (Z.ge_le _ _ H2); clear H2; intro; generalize (Z.gt_lt _ _ H4);
     clear H4; intro; generalize (Zlt_le_weak _ _ H4); intro;
     repeat apply Zmult_le_0_compat; auto with zarith).
 Qed.
@@ -428,7 +428,7 @@ Proof.
     unfold cond_pq, cond_pqb in H; elim_hyps;
     unfold pytha_set_even, cond_pq, cond_pqb; exists x; exists x0; exists x1;
     try solve [ intuition ].
-  elimtype False; rewrite <- Zmult_assoc in H;
+  exfalso; rewrite <- Zmult_assoc in H;
   generalize (Zeven_def2 _ (ex_intro (fun x => a = 2 * x) (x1 * (x * x0)) H));
   intro; generalize (Zeven_not_Zodd _ H9); auto.
 Qed.

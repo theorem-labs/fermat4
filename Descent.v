@@ -4,6 +4,13 @@ Require Export Wf_nat.
 Require Export ZArith.
 Open Scope Z_scope.
 
+(* Rocq 9.2 dropped the [auto with *] fallback from [intuition]'s solver
+   (rocq b2648c0f8f, PR #21129; it had been a warned-about fallback since
+   8.17, rocq 94950d2b56).  9.1 still has it, 9.2 does not.  These proofs
+   were written against the historical behaviour, so restore it. *)
+Ltac intuition_solver ::= auto with *.
+
+
 Definition R_noet (x y : nat * nat) : Prop :=
   ((fst x) + (snd x) < (fst y) + (snd y))%nat.
 
